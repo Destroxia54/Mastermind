@@ -74,8 +74,6 @@ fun CodemakerScreen(
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text("Auto Hints")
             Spacer(modifier = Modifier.width(16.dp))
-            var autoHints by remember { mutableStateOf(GameState.autoHintEnabled) }
-
             Switch(
                 checked = autoHints,
                 onCheckedChange = {

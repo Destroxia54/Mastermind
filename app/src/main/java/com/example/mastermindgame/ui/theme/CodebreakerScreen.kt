@@ -1,5 +1,6 @@
 package com.example.mastermindgame.ui.theme
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -43,6 +44,7 @@ fun CodebreakerScreen(
     onGameOver: (Boolean, List<ColorPeg>) -> Unit,
     onRevealCode: () -> Unit
 ){
+    Log.d("MastermindDebug", "AutoHintEnabled in Codebreaker: ${GameState.autoHintEnabled}")
     var currentGuess by remember { mutableStateOf(listOf<ColorPeg>()) }
     var guesses by remember { mutableStateOf(GameState.codebreakerGuesses) }
     var blackPegsInput by remember { mutableStateOf("") }

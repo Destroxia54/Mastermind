@@ -16,6 +16,7 @@ import androidx.compose.animation.core.tween
 fun GameOverScreen(
     won: Boolean,
     guessesUsed: Int,
+    isSinglePlayer: Boolean,
     onReturnToMenu: () -> Unit,
     onPlayAgain: () -> Unit
 ){

@@ -18,6 +18,7 @@ import com.example.mastermindgame.ui.theme.CodebreakerScreen
 import com.example.mastermindgame.ui.theme.GameOverScreen
 import com.example.mastermindgame.ui.theme.CodeRevealScreen
 import com.example.mastermindgame.model.ColorPeg
+import android.util.Log
 
 
 class MainActivity : ComponentActivity() {
@@ -85,11 +86,12 @@ fun MastermindNavHost() {
             val result = backStackEntry.arguments?.getString("result")
             val won = result == "win"
             val guessesUsed = GameState.codebreakerGuesses.size
-
+            val mode = GameState.singlePlayerMode // 👈 capture here
 
             GameOverScreen(
                 won = won,
-                guessesUsed = guessesUsed, // ✅ pass it into the screen
+                guessesUsed = guessesUsed,
+                isSinglePlayer = mode, // 👈 pass into screen
                 onReturnToMenu = {
                     GameState.reset()
                     navController.navigate("entry") {
@@ -97,19 +99,20 @@ fun MastermindNavHost() {
                     }
                 },
                 onPlayAgain = {
-                    val wasSinglePlayer = GameState.singlePlayerMode
                     GameState.reset()
 
-                    if (wasSinglePlayer) {
+                    if (mode) {
                         GameState.secretCode = List(4) { ColorPeg.values().random() }
                         GameState.autoHintEnabled = true
                         GameState.singlePlayerMode = true
+
                         navController.navigate("codebreaker") {
                             popUpTo("entry") { inclusive = true }
                         }
                     } else {
                         GameState.autoHintEnabled = false
                         GameState.singlePlayerMode = false
+
                         navController.navigate("codemaker") {
                             popUpTo("entry") { inclusive = true }
                         }
@@ -117,6 +120,7 @@ fun MastermindNavHost() {
                 }
             )
         }
+
 
         composable("reveal") {
             CodeRevealScreen {

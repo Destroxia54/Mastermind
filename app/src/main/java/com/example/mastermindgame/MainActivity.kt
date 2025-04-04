@@ -73,7 +73,8 @@ fun MastermindNavHost() {
         composable("gameover/{result}") { backStackEntry ->
             val result = backStackEntry.arguments?.getString("result")
             val won = result == "win"
-            val guessesUsed = 12 - GameState.guessesLeft  // ✅ store before reset
+            val guessesUsed = GameState.codebreakerGuesses.size
+
 
             GameOverScreen(
                 won = won,
@@ -92,8 +93,6 @@ fun MastermindNavHost() {
                 }
             )
         }
-
-
 
         composable("reveal") {
             CodeRevealScreen {

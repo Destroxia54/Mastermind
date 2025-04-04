@@ -1,5 +1,6 @@
 package com.example.mastermindgame.ui.theme
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -11,19 +12,21 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.core.tween
+import androidx.navigation.NavController
 import com.example.mastermindgame.model.ColorPeg
 
 @Composable
 fun GameOverScreen(
+    navController: NavController,
     won: Boolean,
     guessesUsed: Int,
     correctCode: List<ColorPeg>,
     isSinglePlayer: Boolean,
-    onReturnToMenu: () -> Unit,
-    onPlayAgain: () -> Unit
+    onReturnToMenu: () -> Unit
 ){
     val message = if (won) "🎉 You Win!" else "💥 You Lose!"
-
+    Log.d("GameOverDebug", "correctCode = ${correctCode.map { it.name }}")
+    Log.d("GameOverDebug", "GameState.secretCode = ${GameState.secretCode.map { it.name }}")
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -63,8 +66,7 @@ fun GameOverScreen(
             }
 
             Button(onClick = {
-                GameState.reset()
-                onPlayAgain()
+                navController.navigate("restart")
             }) {
                 Text("Play Again")
             }

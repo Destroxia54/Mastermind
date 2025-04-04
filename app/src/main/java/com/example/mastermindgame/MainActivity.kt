@@ -20,6 +20,7 @@ import com.example.mastermindgame.ui.theme.CodebreakerScreen
 import com.example.mastermindgame.ui.theme.GameOverScreen
 import com.example.mastermindgame.ui.theme.CodeRevealScreen
 import com.example.mastermindgame.model.ColorPeg
+import com.example.mastermindgame.ui.theme.RestartScreen
 
 
 class MainActivity : ComponentActivity() {
@@ -91,6 +92,7 @@ fun MastermindNavHost() {
             val codeSnapshot = GameState.secretCode.toList()
 
             GameOverScreen(
+                navController = navController,  // ✅ Add this
                 won = won,
                 guessesUsed = guessesUsed,
                 correctCode = codeSnapshot,
@@ -100,31 +102,13 @@ fun MastermindNavHost() {
                     navController.navigate("entry") {
                         popUpTo("entry") { inclusive = true }
                     }
-                },
-                onPlayAgain = {
-                    if (mode) {
-                        Handler(Looper.getMainLooper()).postDelayed({
-                            GameState.secretCode = List(4) { ColorPeg.values().random() }
-                            GameState.autoHintEnabled = true
-                            GameState.singlePlayerMode = true
-
-                            navController.navigate("codebreaker") {
-                                popUpTo("entry") { inclusive = true }
-                            }
-                        }, 300)
-                    } else {
-                        GameState.autoHintEnabled = false
-                        GameState.singlePlayerMode = false
-
-                        navController.navigate("codemaker") {
-                            popUpTo("entry") { inclusive = true }
-                        }
-                    }
                 }
             )
         }
 
-
+        composable("restart") {
+            RestartScreen(navController)
+        }
 
         composable("reveal") {
             CodeRevealScreen {

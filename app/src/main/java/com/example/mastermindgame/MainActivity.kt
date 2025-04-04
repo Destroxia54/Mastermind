@@ -46,18 +46,20 @@ fun MastermindNavHost() {
         composable("entry") {
             GameEntryScreen(
                 onSinglePlayer = {
+                    GameState.reset() // ✅ Clear all state
                     GameState.secretCode = List(4) { ColorPeg.values().random() }
-                    GameState.pin = ""
                     GameState.autoHintEnabled = true
-                    GameState.singlePlayerMode = true // 👈 Add this line
+                    GameState.singlePlayerMode = true
                     navController.navigate("codebreaker")
                 },
                 onLocalMultiplayer = {
+                    GameState.reset() // ✅ Clear all state
                     GameState.autoHintEnabled = false
-                    GameState.singlePlayerMode = false // 👈 explicitly set false
+                    GameState.singlePlayerMode = false
                     navController.navigate("codemaker")
                 }
             )
+
         }
 
 

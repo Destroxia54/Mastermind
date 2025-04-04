@@ -97,9 +97,22 @@ fun MastermindNavHost() {
                     }
                 },
                 onPlayAgain = {
+                    val wasSinglePlayer = GameState.singlePlayerMode
                     GameState.reset()
-                    navController.navigate("codemaker") {
-                        popUpTo("entry") { inclusive = true }
+
+                    if (wasSinglePlayer) {
+                        GameState.secretCode = List(4) { ColorPeg.values().random() }
+                        GameState.autoHintEnabled = true
+                        GameState.singlePlayerMode = true
+                        navController.navigate("codebreaker") {
+                            popUpTo("entry") { inclusive = true }
+                        }
+                    } else {
+                        GameState.autoHintEnabled = false
+                        GameState.singlePlayerMode = false
+                        navController.navigate("codemaker") {
+                            popUpTo("entry") { inclusive = true }
+                        }
                     }
                 }
             )

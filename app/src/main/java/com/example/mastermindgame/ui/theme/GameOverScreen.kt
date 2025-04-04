@@ -11,18 +11,18 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.core.tween
+import com.example.mastermindgame.model.ColorPeg
 
 @Composable
 fun GameOverScreen(
     won: Boolean,
     guessesUsed: Int,
+    correctCode: List<ColorPeg>,
     isSinglePlayer: Boolean,
     onReturnToMenu: () -> Unit,
     onPlayAgain: () -> Unit
 ){
     val message = if (won) "🎉 You Win!" else "💥 You Lose!"
-
-    val code = GameState.secretCode
 
     Column(
         modifier = Modifier
@@ -44,7 +44,7 @@ fun GameOverScreen(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                code.forEach { peg ->
+                correctCode.forEach { peg ->
                     ColorButton(color = peg.color, onClick = {}, showBorder = false)
                 }
             }

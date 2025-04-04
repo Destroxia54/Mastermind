@@ -1,6 +1,8 @@
 package com.example.mastermindgame
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -18,7 +20,6 @@ import com.example.mastermindgame.ui.theme.CodebreakerScreen
 import com.example.mastermindgame.ui.theme.GameOverScreen
 import com.example.mastermindgame.ui.theme.CodeRevealScreen
 import com.example.mastermindgame.model.ColorPeg
-import android.util.Log
 
 
 class MainActivity : ComponentActivity() {
@@ -86,12 +87,14 @@ fun MastermindNavHost() {
             val result = backStackEntry.arguments?.getString("result")
             val won = result == "win"
             val guessesUsed = GameState.codebreakerGuesses.size
-            val mode = GameState.singlePlayerMode // 👈 capture here
+            val mode = GameState.singlePlayerMode
+            val codeSnapshot = GameState.secretCode.toList()
 
             GameOverScreen(
                 won = won,
                 guessesUsed = guessesUsed,
-                isSinglePlayer = mode, // 👈 pass into screen
+                correctCode = codeSnapshot,
+                isSinglePlayer = mode,
                 onReturnToMenu = {
                     GameState.reset()
                     navController.navigate("entry") {
@@ -99,16 +102,16 @@ fun MastermindNavHost() {
                     }
                 },
                 onPlayAgain = {
-                    GameState.reset()
-
                     if (mode) {
-                        GameState.secretCode = List(4) { ColorPeg.values().random() }
-                        GameState.autoHintEnabled = true
-                        GameState.singlePlayerMode = true
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            GameState.secretCode = List(4) { ColorPeg.values().random() }
+                            GameState.autoHintEnabled = true
+                            GameState.singlePlayerMode = true
 
-                        navController.navigate("codebreaker") {
-                            popUpTo("entry") { inclusive = true }
-                        }
+                            navController.navigate("codebreaker") {
+                                popUpTo("entry") { inclusive = true }
+                            }
+                        }, 300)
                     } else {
                         GameState.autoHintEnabled = false
                         GameState.singlePlayerMode = false
@@ -120,6 +123,7 @@ fun MastermindNavHost() {
                 }
             )
         }
+
 
 
         composable("reveal") {

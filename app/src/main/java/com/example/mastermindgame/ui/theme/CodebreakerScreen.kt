@@ -12,6 +12,9 @@ import com.example.mastermindgame.logic.GameState
 import com.example.mastermindgame.ui.theme.ColorButton
 import com.example.mastermindgame.ui.theme.GuessRow
 import com.example.mastermindgame.model.GuessResult
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.saveable.listSaver
 
 fun calculateHint(code: List<ColorPeg>, guess: List<ColorPeg>): Pair<Int, Int> {
     var black = 0
@@ -45,10 +48,15 @@ fun CodebreakerScreen(
     onRevealCode: () -> Unit
 ){
     Log.d("MastermindDebug", "AutoHintEnabled in Codebreaker: ${GameState.autoHintEnabled}")
-    var currentGuess by remember { mutableStateOf(listOf<ColorPeg>()) }
+    var currentGuess by rememberSaveable(
+        stateSaver = listSaver(
+            save = { it.map { peg -> peg.name } },
+            restore = { names -> names.map { ColorPeg.valueOf(it) } }
+        )
+    ) { mutableStateOf(listOf<ColorPeg>()) }
     var guesses by remember { mutableStateOf(GameState.codebreakerGuesses) }
-    var blackPegsInput by remember { mutableStateOf("") }
-    var whitePegsInput by remember { mutableStateOf("") }
+    var blackPegsInput by rememberSaveable { mutableStateOf("") }
+    var whitePegsInput by rememberSaveable { mutableStateOf("") }
 
     Column(
         modifier = Modifier

@@ -10,11 +10,9 @@ import com.example.mastermindgame.logic.GameState
 
 @Composable
 fun GameEntryScreen(
-    onCodemakerClick: () -> Unit,
-    onCodebreakerClick: () -> Unit
+    onSinglePlayer: () -> Unit,
+    onLocalMultiplayer: () -> Unit
 ) {
-    var autoHints by remember { mutableStateOf(false) }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -23,39 +21,23 @@ fun GameEntryScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text("🎯 Mastermind", style = MaterialTheme.typography.headlineLarge)
-
-        Spacer(modifier = Modifier.height(32.dp))
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Text("Auto Hints")
-            Spacer(modifier = Modifier.width(16.dp))
-            Switch(
-                checked = autoHints,
-                onCheckedChange = { autoHints = it }
-            )
-        }
-
         Spacer(modifier = Modifier.height(48.dp))
 
         Button(
-            onClick = {
-                GameState.autoHintEnabled = autoHints
-                onCodemakerClick()
-            },
+            onClick = onSinglePlayer,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Be the Codemaker")
+            Text("Single Player")
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
-            onClick = {
-                GameState.autoHintEnabled = autoHints
-                onCodebreakerClick()
-            },
+            onClick = onLocalMultiplayer,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Be the Codebreaker")
+            Text("Local Multiplayer")
         }
     }
 }
+

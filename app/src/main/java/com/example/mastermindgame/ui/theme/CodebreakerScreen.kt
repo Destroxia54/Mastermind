@@ -171,10 +171,12 @@ fun CodebreakerScreen(
             }
         }
         Spacer(modifier = Modifier.height(24.dp))
-        Button(onClick = {
-            onRevealCode()
-        }) {
-            Text("Reveal Code (Codemaker Only)")
+        if (!GameState.singlePlayerMode) {
+            Button(onClick = {
+                onRevealCode()
+            }) {
+                Text("Reveal Code (Codemaker Only)")
+            }
         }
     }
 }

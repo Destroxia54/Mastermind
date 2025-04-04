@@ -9,6 +9,8 @@ object GameState {
     var autoHintEnabled: Boolean = false // default to manual hints
     var guessesLeft: Int = 12
     var codebreakerGuesses: List<GuessResult> = listOf()
+    var singlePlayerMode: Boolean = false
+
 
     fun reset() {
         secretCode = emptyList()
@@ -16,5 +18,6 @@ object GameState {
         autoHintEnabled = false
         guessesLeft = 12
         codebreakerGuesses = listOf()
+        singlePlayerMode = false
     }
 }

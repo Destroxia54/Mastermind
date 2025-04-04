@@ -19,6 +19,8 @@ fun CodemakerScreen(
 ) {
     var selectedCode by remember { mutableStateOf(listOf<ColorPeg>()) }
     var pin by remember { mutableStateOf("") }
+    var autoHints by remember { mutableStateOf(GameState.autoHintEnabled) }
+
 
     Column(
         modifier = Modifier
@@ -69,6 +71,21 @@ fun CodemakerScreen(
         }
 
         Spacer(modifier = Modifier.height(16.dp))
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text("Auto Hints")
+            Spacer(modifier = Modifier.width(16.dp))
+            var autoHints by remember { mutableStateOf(GameState.autoHintEnabled) }
+
+            Switch(
+                checked = autoHints,
+                onCheckedChange = {
+                    autoHints = it
+                    GameState.autoHintEnabled = it
+                }
+            )
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
         PinKeypad(
             pinValue = pin,
             onPinChange = { pin = it }
@@ -81,6 +98,7 @@ fun CodemakerScreen(
                     GameState.secretCode = selectedCode
                     GameState.pin = pin
                     GameState.guessesLeft = 12
+                    GameState.autoHintEnabled = autoHints
                     onCodeConfirmed(selectedCode, pin)
                 }
             },

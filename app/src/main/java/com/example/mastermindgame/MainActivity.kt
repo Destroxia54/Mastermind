@@ -17,6 +17,7 @@ import com.example.mastermindgame.ui.theme.CodemakerScreen
 import com.example.mastermindgame.ui.theme.CodebreakerScreen
 import com.example.mastermindgame.ui.theme.GameOverScreen
 import com.example.mastermindgame.ui.theme.CodeRevealScreen
+import com.example.mastermindgame.model.ColorPeg
 
 
 class MainActivity : ComponentActivity() {
@@ -41,21 +42,31 @@ fun MastermindNavHost() {
     NavHost(navController, startDestination = "entry") {
         composable("entry") {
             GameEntryScreen(
-                onCodemakerClick = { navController.navigate("codemaker") },
-                onCodebreakerClick = { navController.navigate("codebreaker") }
+                onSinglePlayer = {
+                    GameState.secretCode = List(4) { ColorPeg.values().random() }
+                    GameState.pin = ""
+                    GameState.autoHintEnabled = true
+                    GameState.singlePlayerMode = true // 👈 Add this line
+                    navController.navigate("codebreaker")
+                },
+                onLocalMultiplayer = {
+                    GameState.autoHintEnabled = false
+                    GameState.singlePlayerMode = false // 👈 explicitly set false
+                    navController.navigate("codemaker")
+                }
             )
         }
+
 
         // Codemaker screen - selects code + pin
         composable("codemaker") {
             CodemakerScreen { selectedCode, pin ->
-                // For now, just go back to entry
-                // Later: save selectedCode + pin in shared state
-                navController.navigate("entry") {
+                navController.navigate("codebreaker") {
                     popUpTo("entry") { inclusive = true }
                 }
             }
         }
+
 
         // Codebreaker screen - makes guesses
         composable("codebreaker") {

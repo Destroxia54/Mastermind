@@ -44,7 +44,7 @@ fun CodebreakerScreen(
     onRevealCode: () -> Unit
 ){
     var currentGuess by remember { mutableStateOf(listOf<ColorPeg>()) }
-    var guesses by remember { mutableStateOf(listOf<GuessResult>()) }
+    var guesses by remember { mutableStateOf(GameState.codebreakerGuesses) }
     var blackPegsInput by remember { mutableStateOf("") }
     var whitePegsInput by remember { mutableStateOf("") }
 
@@ -102,6 +102,7 @@ fun CodebreakerScreen(
             if (GameState.autoHintEnabled) {
                 val (black, white) = calculateHint(GameState.secretCode, currentGuess)
                 guesses = guesses + GuessResult(currentGuess, black, white)
+                GameState.codebreakerGuesses = guesses
                 currentGuess = listOf()
 
                 if (black == 4) {
@@ -136,6 +137,7 @@ fun CodebreakerScreen(
                     val black = blackPegsInput.toIntOrNull() ?: 0
                     val white = whitePegsInput.toIntOrNull() ?: 0
                     guesses = guesses + GuessResult(currentGuess, black, white)
+                    GameState.codebreakerGuesses = guesses
                     currentGuess = listOf()
                     blackPegsInput = ""
                     whitePegsInput = ""

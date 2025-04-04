@@ -15,5 +15,6 @@ object GameState {
         pin = ""
         autoHintEnabled = false
         guessesLeft = 12
+        codebreakerGuesses = listOf()
     }
 }

@@ -17,23 +17,42 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.unit.dp
 
 
 enum class PegType { BLACK, WHITE, EMPTY }
 
 @Composable
 fun HintPeg(type: PegType) {
-    val color = when (type) {
-        PegType.BLACK -> Color.Black
-        PegType.WHITE -> Color.White
-        PegType.EMPTY -> Color.LightGray
+    val brush = when (type) {
+        PegType.BLACK -> Brush.radialGradient(
+            colors = listOf(Color(0xFF444444), Color.Black),
+            radius = 16f
+        )
+        PegType.WHITE -> Brush.radialGradient(
+            colors = listOf(Color.White, Color(0xFFAAAAAA)),
+            radius = 16f
+        )
+        PegType.EMPTY -> Brush.radialGradient(
+            colors = listOf(Color.LightGray, Color.DarkGray),
+            radius = 16f
+        )
     }
 
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
             .size(12.dp)
-            .background(color = color, shape = RoundedCornerShape(2.dp))
+            .background(brush = brush, shape = RoundedCornerShape(2.dp))
             .border(1.dp, Color.DarkGray, shape = RoundedCornerShape(2.dp))
     ) {
         if (type == PegType.EMPTY) {
@@ -45,3 +64,4 @@ fun HintPeg(type: PegType) {
         }
     }
 }
+
